@@ -1,12 +1,14 @@
 from decimal import Decimal
 import pikepdf
-from pikepdf import Pdf, Page
+from pikepdf import Pdf, Page, Name, PdfImage
 from base64 import b64encode
 import io
+import zlib
+from PIL import Image, ImageOps
 
 
-def handle_uploaded_file(pdf, colors_input, prec):
-    new_pdf = replace_colors(pdf, colors_input, prec)
+def handle_uploaded_file(pdf, colors_input, prec, mode):
+    new_pdf = replace_colors(pdf, colors_input, prec, int(mode))
     return get_download_link(new_pdf, pdf.name)
 
 
@@ -17,30 +19,89 @@ def get_download_link(file, filename_input):
     return {'b64': pdf_base64_string, 'filename': filename}
 
 
-def replace_colors(pdf_input, colors_input, prec):
+def replace_colors(pdf_input, colors_input, prec, mode):
     with Pdf.open(pdf_input) as pdf:
         for x in range(len(pdf.pages)):
-            print(x)
             page = pdf.pages[x]
             stream = pikepdf.parse_content_stream(page)
             for entry in stream:
-                if str(entry[1]) == 'sc':
+                if str(entry[1]).lower() == 'sc':
                     if close_enough(entry[0], colors_input.get('c1_old'), prec):
                         print(entry[0][0], entry[0][1], entry[0][2])
-                        entry[0][0] = 1
-                        entry[0][1] = 1
-                        entry[0][2] = 1
+                        newcolor = colors_input.get('c1_new').split('-')
+                        newcolor = [int(x) / 255 for x in newcolor]
+                        entry[0][0] = newcolor[0]
+                        entry[0][1] = newcolor[1]
+                        entry[0][2] = newcolor[2]
+                        print(entry[0][0], entry[0][1], entry[0][2])
                     elif close_enough(entry[0], colors_input.get('c2_old'), prec):
                         print(entry[0][0], entry[0][1], entry[0][2])
-                        entry[0][0] = 0
-                        entry[0][1] = 0
-                        entry[0][2] = 0
+                        newcolor = colors_input.get('c2_new').split('-')
+                        newcolor = [int(x) / 255 for x in newcolor]
+                        entry[0][0] = newcolor[0]
+                        entry[0][1] = newcolor[1]
+                        entry[0][2] = newcolor[2]
                     else:
+                        if not colors_input.get('c3_old') is None:
+                            if close_enough(entry[0], colors_input.get('c3_old'), prec):
+                                print(entry[0][0], entry[0][1], entry[0][2])
+                                newcolor = colors_input.get(
+                                    'c3_new').split('-')
+                                newcolor = [int(x) / 255 for x in newcolor]
+                                entry[0][0] = newcolor[0]
+                                entry[0][1] = newcolor[1]
+                                entry[0][2] = newcolor[2]
+                            if not colors_input.get('c4_old') is None:
+                                if close_enough(entry[0], colors_input.get('c4_old'), prec):
+                                    print(entry[0][0], entry[0]
+                                          [1], entry[0][2])
+                                    newcolor = colors_input.get(
+                                        'c4_new').split('-')
+                                    newcolor = [int(x) / 255 for x in newcolor]
+                                    entry[0][0] = newcolor[0]
+                                    entry[0][1] = newcolor[1]
+                                    entry[0][2] = newcolor[2]
+                                if not colors_input.get('c5_old') is None:
+                                    if close_enough(entry[0], colors_input.get('c5_old'), prec):
+                                        print(entry[0][0], entry[0]
+                                              [1], entry[0][2])
+                                        newcolor = colors_input.get(
+                                            'c5_new').split('-')
+                                        newcolor = [
+                                            int(x) / 255 for x in newcolor]
+                                        entry[0][0] = newcolor[0]
+                                        entry[0][1] = newcolor[1]
+                                        entry[0][2] = newcolor[2]
                         print(entry[0][0])
 
             new_content_stream = pikepdf.unparse_content_stream(stream)
-
             page.Contents = pdf.make_stream(new_content_stream)
+
+            if mode == 1:
+                for rawimagecode in page.images:
+                    rawimage = page.images[rawimagecode]
+                    pdfimage = PdfImage(rawimage)
+                    rawimage = pdfimage.obj
+                    pillowimage = pdfimage.as_pil_image()
+                    grayscale = pillowimage.convert('L')
+                    rawimage.write(zlib.compress(grayscale.tobytes()),
+                                   filter=Name("/FlateDecode"))
+                    rawimage.ColorSpace = Name("/DeviceGray")
+
+            if mode == 2:
+                for rawimagecode in page.images:
+                    rawimage = page.images[rawimagecode]
+                    pdfimage = PdfImage(rawimage)
+                    rawimage = pdfimage.obj
+                    pillowimage = pdfimage.as_pil_image()
+                    clrs = pillowimage.getcolors()
+                    if not clrs is None:
+                        if len(clrs) < 5:
+                            pass
+                    pillowimage_inverted = ImageOps.invert(pillowimage)
+                    rawimage.write(zlib.compress(pillowimage_inverted.tobytes()),
+                                   filter=Name("/FlateDecode"))
+
         stream = io.BytesIO()
         pdf.save(stream)
     return bytes(stream.getvalue())

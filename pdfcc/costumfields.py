@@ -40,8 +40,8 @@ class RGBField(MultiValueField):
 
 class RGBWidget(forms.widgets.MultiWidget):
     def __init__(self, attrs=None):
-        widgets = [forms.NumberInput(),
-                   forms.NumberInput(), forms.NumberInput(), ]
+        widgets = [forms.NumberInput(attrs={'style': 'width:4rem', 'onchange': 'updateColors()'}),
+                   forms.NumberInput(attrs={'style': 'width:4rem', 'onchange': 'updateColors()'}), forms.NumberInput(attrs={'style': 'width:4rem', 'onchange': 'updateColors()'}), ]
         super(RGBWidget, self).__init__(widgets, attrs)
 
     def decompress(self, value):
