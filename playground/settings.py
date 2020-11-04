@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3n+rp13mnopi#(#$79beb**bt4cru8e=)cly0qs7&&w1!9hfb2'
+SECRET_KEY = 'secret'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -120,4 +121,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MAX_UPLOAD_SIZE = "10485760"
+# Activate Django-Heroku.
+django_heroku.settings(locals(), databases=False, logging=False)
