@@ -1,0 +1,8 @@
+<h1>Change Colours of a PDF</h1>
+<h2>Please provide Colors as RGB values (0-255)</h2>
+<h1>{{form.description.value}}</h1>
+
+<form enctype="multipart/form-data" action="{% url 'index' %}" method="post">
+    {% csrf_token %} {{form.as_p}}
+    <input type="submit" value="replace Colors">
+</form>
