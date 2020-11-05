@@ -1,9 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import MyForm
+from .forms import MyForm, MyFormAnalyse
 
 # Imaginary function to handle an uploaded file.
-from .utility import handle_uploaded_file
+from .utility import handle_uploaded_file, new_analyse
+
+
+def analyse(request):
+    if request.method == 'POST':
+        form = MyFormAnalyse(request.POST, request.FILES)
+        if form.is_valid():
+            result = new_analyse(request.FILES.get('pdf'))
+            return render(request, 'pdfcc/analyse.html', {'res': result})
+    else:
+        form = MyFormAnalyse()
+    return render(request, 'pdfcc/analyse.html', {'form': form})
 
 
 def index(request):

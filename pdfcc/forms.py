@@ -6,6 +6,12 @@ from .validators import validate_file_size
 from .costumfields import RGBField
 
 
+class MyFormAnalyse(forms.Form):
+
+    pdf = forms.FileField(label='PDF File (required)',
+                          validators=[validate_file_size])
+
+
 class MyForm(forms.Form):
 
     pdf = forms.FileField(label='PDF File (required)',
