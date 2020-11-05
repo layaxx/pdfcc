@@ -38,14 +38,14 @@ class MyForm(forms.Form):
     c5_new = RGBField(label='Color to replace fifth Color',
                       required=False, initial='255-255-255')
 
-    c6_old = RGBField(label='fifth Color to be replace',
+    c6_old = RGBField(label='sixth Color to be replace',
                       required=False, initial='242-242-242')
-    c6_new = RGBField(label='Color to replace fifth Color',
+    c6_new = RGBField(label='Color to replace sixth Color',
                       required=False, initial='0-0-0')
 
-    c7_old = RGBField(label='fifth Color to be replace',
+    c7_old = RGBField(label='seventh Color to be replace',
                       required=False, initial='74-85-104')
-    c7_new = RGBField(label='Color to replace fifth Color',
+    c7_new = RGBField(label='Color to replace seventh Color',
                       required=False, initial='255-255-255')
 
     color_count = forms.IntegerField(

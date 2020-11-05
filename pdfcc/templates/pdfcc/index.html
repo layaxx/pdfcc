@@ -299,127 +299,23 @@
                 }
 
                 function updateColors() {
-                    document.getElementById("c1_old").style.backgroundColor =
-                        "rgb(" +
-                        document.getElementById("id_c1_old_0").value +
-                        "," +
-                        document.getElementById("id_c1_old_1").value +
-                        "," +
-                        document.getElementById("id_c1_old_2").value +
-                        ")";
-                    document.getElementById("c1_new").style.backgroundColor =
-                        "rgb(" +
-                        document.getElementById("id_c1_new_0").value +
-                        "," +
-                        document.getElementById("id_c1_new_1").value +
-                        "," +
-                        document.getElementById("id_c1_new_2").value +
-                        ")";
-                    document.getElementById("c2_old").style.backgroundColor =
-                        "rgb(" +
-                        document.getElementById("id_c2_old_0").value +
-                        "," +
-                        document.getElementById("id_c2_old_1").value +
-                        "," +
-                        document.getElementById("id_c2_old_2").value +
-                        ")";
-                    document.getElementById("c2_new").style.backgroundColor =
-                        "rgb(" +
-                        document.getElementById("id_c2_new_0").value +
-                        "," +
-                        document.getElementById("id_c2_new_1").value +
-                        "," +
-                        document.getElementById("id_c2_new_2").value +
-                        ")";
-                    if (colors > 2) {
-                        document.getElementById("c3_new").style.backgroundColor =
+                    for (let i = 1; i <= colors; i++) {
+                        document.getElementById("c" + i + "_old").style.backgroundColor =
                             "rgb(" +
-                            document.getElementById("id_c3_new_0").value +
+                            document.getElementById("id_c" + i + "_old_0").value +
                             "," +
-                            document.getElementById("id_c3_new_1").value +
+                            document.getElementById("id_c" + i + "_old_1").value +
                             "," +
-                            document.getElementById("id_c3_new_2").value +
+                            document.getElementById("id_c" + i + "_old_2").value +
                             ")";
-                        document.getElementById("c3_old").style.backgroundColor =
+                        document.getElementById("c" + i + "_new").style.backgroundColor =
                             "rgb(" +
-                            document.getElementById("id_c3_old_0").value +
+                            document.getElementById("id_c" + i + "_new_0").value +
                             "," +
-                            document.getElementById("id_c3_old_1").value +
+                            document.getElementById("id_c" + i + "_new_1").value +
                             "," +
-                            document.getElementById("id_c3_old_2").value +
+                            document.getElementById("id_c" + i + "_new_2").value +
                             ")";
-                        if (colors > 3) {
-                            document.getElementById("c4_new").style.backgroundColor =
-                                "rgb(" +
-                                document.getElementById("id_c4_new_0").value +
-                                "," +
-                                document.getElementById("id_c4_new_1").value +
-                                "," +
-                                document.getElementById("id_c4_new_2").value +
-                                ")";
-                            document.getElementById("c4_old").style.backgroundColor =
-                                "rgb(" +
-                                document.getElementById("id_c4_old_0").value +
-                                "," +
-                                document.getElementById("id_c4_old_1").value +
-                                "," +
-                                document.getElementById("id_c4_old_2").value +
-                                ")";
-                            if (colors > 4) {
-                                document.getElementById("c5_old").style.backgroundColor =
-                                    "rgb(" +
-                                    document.getElementById("id_c5_old_0").value +
-                                    "," +
-                                    document.getElementById("id_c5_old_1").value +
-                                    "," +
-                                    document.getElementById("id_c5_old_2").value +
-                                    ")";
-                                document.getElementById("c5_new").style.backgroundColor =
-                                    "rgb(" +
-                                    document.getElementById("id_c5_new_0").value +
-                                    "," +
-                                    document.getElementById("id_c5_new_1").value +
-                                    "," +
-                                    document.getElementById("id_c5_new_2").value +
-                                    ")";
-                                if (colors > 5) {
-                                    document.getElementById("c6_old").style.backgroundColor =
-                                        "rgb(" +
-                                        document.getElementById("id_c6_old_0").value +
-                                        "," +
-                                        document.getElementById("id_c6_old_1").value +
-                                        "," +
-                                        document.getElementById("id_c6_old_2").value +
-                                        ")";
-                                    document.getElementById("c6_new").style.backgroundColor =
-                                        "rgb(" +
-                                        document.getElementById("id_c6_new_0").value +
-                                        "," +
-                                        document.getElementById("id_c6_new_1").value +
-                                        "," +
-                                        document.getElementById("id_c6_new_2").value +
-                                        ")";
-                                    if (colors > 6) {
-                                        document.getElementById("c7_old").style.backgroundColor =
-                                            "rgb(" +
-                                            document.getElementById("id_c7_old_0").value +
-                                            "," +
-                                            document.getElementById("id_c7_old_1").value +
-                                            "," +
-                                            document.getElementById("id_c7_old_2").value +
-                                            ")";
-                                        document.getElementById("c7_new").style.backgroundColor =
-                                            "rgb(" +
-                                            document.getElementById("id_c7_new_0").value +
-                                            "," +
-                                            document.getElementById("id_c7_new_1").value +
-                                            "," +
-                                            document.getElementById("id_c7_new_2").value +
-                                            ")";
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -437,69 +333,30 @@
                 updateColors();
 
                 function addColor() {
-                    if (colors == 2) {
-                        elements = document.getElementsByClassName("c3");
-                        for (let i = 0; i < elements.length; i++) {
-                            elements[i].style.display = "block";
-                        }
-                        let x = document.getElementById("sidebar_list").innerHTML;
-                        document.getElementById("sidebar_list").innerHTML = x.replace(
-                            "<!-- c3 -->",
-                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Third Color old </h6> <h6 class = "my-0" > Third Color new </h6> </div> <div ><div class = "rect"id = "c3_old" > </div> <div class = "rect"id = "c3_new" > </div> </div> </li>`
-                        );
-                        document.getElementById("id_color_count").value = 3;
-                    } else if (colors == 3) {
-                        elements = document.getElementsByClassName("c4");
-                        for (let i = 0; i < elements.length; i++) {
-                            elements[i].style.display = "block";
-                        }
-                        let x = document.getElementById("sidebar_list").innerHTML;
-                        document.getElementById("sidebar_list").innerHTML = x.replace(
-                            "<!-- c4 -->",
-                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Fourth Color old </h6> <h6 class = "my-0" > Fourth Color new </h6> </div> <div ><div class = "rect"id = "c4_old" > </div> <div class = "rect"id = "c4_new" > </div> </div> </li>`
-                        );
-                        document.getElementById("id_color_count").value = 4;
-                    } else if (colors == 4) {
-                        elements = document.getElementsByClassName("c5");
-                        for (let i = 0; i < elements.length; i++) {
-                            elements[i].style.display = "block";
-                        }
-                        let x = document.getElementById("sidebar_list").innerHTML;
-                        document.getElementById("sidebar_list").innerHTML = x.replace(
-                            "<!-- c5 -->",
-                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Fifth Color old </h6> <h6 class = "my-0" > Fifth Color new </h6> </div> <div ><div class = "rect"id = "c5_old" > </div> <div class = "rect"id = "c5_new" > </div> </div> </li>`
-                        );
-                        document.getElementById("id_color_count").value = 5;
-                    } else if (colors == 5) {
-                        elements = document.getElementsByClassName("c6");
-                        for (let i = 0; i < elements.length; i++) {
-                            elements[i].style.display = "block";
-                        }
-                        let x = document.getElementById("sidebar_list").innerHTML;
-                        document.getElementById("sidebar_list").innerHTML = x.replace(
-                            "<!-- c6 -->",
-                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Sixth Color old </h6> <h6 class = "my-0" > Sixth Color new </h6> </div> <div ><div class = "rect"id = "c6_old" > </div> <div class = "rect"id = "c6_new" > </div> </div> </li>`
-                        );
-
-                        document.getElementById("id_color_count").value = 6;
-                    } else if (colors == 6) {
-                        elements = document.getElementsByClassName("c7");
-                        for (let i = 0; i < elements.length; i++) {
-                            elements[i].style.display = "block";
-                        }
-                        let x = document.getElementById("sidebar_list").innerHTML;
-                        document.getElementById("sidebar_list").innerHTML = x.replace(
-                            "<!-- c7 -->",
-                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Seventh Color old </h6> <h6 class = "my-0" > Seventh Color new </h6> </div> <div ><div class = "rect"id = "c7_old" > </div> <div class = "rect"id = "c7_new" > </div> </div> </li>`
-                        );
+                    if (colors >= 7) {
                         document.getElementById("color_warning").style.display = "block";
                         document.getElementById("add_color_button").disabled = true;
-                        document.getElementById("id_color_count").value = 7;
+                        return;
                     } else {
-                        document.getElementById("color_warning").style.display = "block";
-                        document.getElementById("add_color_button").disabled = true;
+                        colors = colors + 1;
+                        elements = document.getElementsByClassName("c" + colors);
+                        for (let i = 0; i < elements.length; i++) {
+                            elements[i].style.display = "block";
+                        }
+                        let x = document.getElementById("sidebar_list").innerHTML;
+                        document.getElementById("sidebar_list").innerHTML = x.replace(
+                            "<!-- c" + colors + " -->",
+                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Color old </h6> <h6 class = "my-0" > Color new </h6> </div> <div ><div class = "rect"id = "c3_old" > </div> <div class = "rect"id = "c3_new" > </div> </div> </li>`
+                            .replace('"c3_old"', '"c' + colors + '_old"')
+                            .replace('"c3_new"', '"c' + colors + '_new"')
+                        );
+                        document.getElementById("id_color_count").value = colors;
+                        if (colors == 7) {
+                            document.getElementById("color_warning").style.display = "block";
+                            document.getElementById("add_color_button").disabled = true;
+                        }
                     }
-                    colors++;
+
                     updateColors();
                 }
             </script>
