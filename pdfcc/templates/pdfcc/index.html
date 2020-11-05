@@ -54,6 +54,14 @@
         .c5 {
             display: none;
         }
+        
+        .c6 {
+            display: none;
+        }
+        
+        .c7 {
+            display: none;
+        }
     </style>
 </head>
 
@@ -66,7 +74,7 @@
                 This is a python based webapp allowing you to change colors in a pdf. The use case this was created for is changing the dark-colored background of slides that will be printed to a lighter color in order not to waste toner.
             </p>
             <div class="alert alert-warning" role="alert">
-                Attention: This does not (currently) replace colors inside of embedded images, but only colors of text and paths.
+                Attention: This is a work in progress. It does not (currently) replace colors inside of embedded images, but only colors of text and paths.
             </div>
             {% if pdf_b64 %}
             <div class="alert alert-success" role="alert">
@@ -141,6 +149,22 @@
                 {{ form.c5_new.errors }} {{ form.c5_new.label_tag }}
                 <br />{{ form.c5_new }}
               </div>
+              <div class="col-md-6 c6">
+                {{ form.c6_old.errors }} {{ form.c6_old.label_tag }}
+                <br />{{ form.c6_old }}
+              </div>
+              <div class="col-md-6 mb-4 c6">
+                {{ form.c6_new.errors }} {{ form.c6_new.label_tag }}
+                <br />{{ form.c6_new }}
+              </div>
+              <div class="col-md-6 c7">
+                {{ form.c7_old.errors }} {{ form.c7_old.label_tag }}
+                <br />{{ form.c7_old }}
+              </div>
+              <div class="col-md-6 mb-4 c7">
+                {{ form.c7_new.errors }} {{ form.c7_new.label_tag }}
+                <br />{{ form.c7_new }}
+              </div>
 
               {{ form.color_count }}
               <div
@@ -149,7 +173,7 @@
                 id="color_warning"
                 style="display: none"
               >
-                Currently only 5 colors are permitted per action.
+                Currently only 7 colors are permitted per action.
               </div>
               <button
                 class="btn btn-light btn-lg btn-block"
@@ -223,6 +247,8 @@
             <!-- c3 -->
             <!-- c4 -->
             <!-- c5 -->
+            <!-- c6 -->
+            <!-- c7 -->
             <li class="list-group-item d-flex justify-content-between">
               <span>Your PDF</span>
               <div style="text-align: right">
@@ -356,6 +382,42 @@
                                     "," +
                                     document.getElementById("id_c5_new_2").value +
                                     ")";
+                                if (colors > 5) {
+                                    document.getElementById("c6_old").style.backgroundColor =
+                                        "rgb(" +
+                                        document.getElementById("id_c6_old_0").value +
+                                        "," +
+                                        document.getElementById("id_c6_old_1").value +
+                                        "," +
+                                        document.getElementById("id_c6_old_2").value +
+                                        ")";
+                                    document.getElementById("c6_new").style.backgroundColor =
+                                        "rgb(" +
+                                        document.getElementById("id_c6_new_0").value +
+                                        "," +
+                                        document.getElementById("id_c6_new_1").value +
+                                        "," +
+                                        document.getElementById("id_c6_new_2").value +
+                                        ")";
+                                    if (colors > 6) {
+                                        document.getElementById("c7_old").style.backgroundColor =
+                                            "rgb(" +
+                                            document.getElementById("id_c7_old_0").value +
+                                            "," +
+                                            document.getElementById("id_c7_old_1").value +
+                                            "," +
+                                            document.getElementById("id_c7_old_2").value +
+                                            ")";
+                                        document.getElementById("c7_new").style.backgroundColor =
+                                            "rgb(" +
+                                            document.getElementById("id_c7_new_0").value +
+                                            "," +
+                                            document.getElementById("id_c7_new_1").value +
+                                            "," +
+                                            document.getElementById("id_c7_new_2").value +
+                                            ")";
+                                    }
+                                }
                             }
                         }
                     }
@@ -407,9 +469,32 @@
                             "<!-- c5 -->",
                             String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Fifth Color old </h6> <h6 class = "my-0" > Fifth Color new </h6> </div> <div ><div class = "rect"id = "c5_old" > </div> <div class = "rect"id = "c5_new" > </div> </div> </li>`
                         );
+                        document.getElementById("id_color_count").value = 5;
+                    } else if (colors == 5) {
+                        elements = document.getElementsByClassName("c6");
+                        for (let i = 0; i < elements.length; i++) {
+                            elements[i].style.display = "block";
+                        }
+                        let x = document.getElementById("sidebar_list").innerHTML;
+                        document.getElementById("sidebar_list").innerHTML = x.replace(
+                            "<!-- c6 -->",
+                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Sixth Color old </h6> <h6 class = "my-0" > Sixth Color new </h6> </div> <div ><div class = "rect"id = "c6_old" > </div> <div class = "rect"id = "c6_new" > </div> </div> </li>`
+                        );
+
+                        document.getElementById("id_color_count").value = 6;
+                    } else if (colors == 6) {
+                        elements = document.getElementsByClassName("c7");
+                        for (let i = 0; i < elements.length; i++) {
+                            elements[i].style.display = "block";
+                        }
+                        let x = document.getElementById("sidebar_list").innerHTML;
+                        document.getElementById("sidebar_list").innerHTML = x.replace(
+                            "<!-- c7 -->",
+                            String.raw `<li class="list-group-item d-flex justify-content-between lh-condensed" ><div><h6 class = "my-0" > Seventh Color old </h6> <h6 class = "my-0" > Seventh Color new </h6> </div> <div ><div class = "rect"id = "c7_old" > </div> <div class = "rect"id = "c7_new" > </div> </div> </li>`
+                        );
                         document.getElementById("color_warning").style.display = "block";
                         document.getElementById("add_color_button").disabled = true;
-                        document.getElementById("id_color_count").value = 5;
+                        document.getElementById("id_color_count").value = 7;
                     } else {
                         document.getElementById("color_warning").style.display = "block";
                         document.getElementById("add_color_button").disabled = true;

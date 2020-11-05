@@ -13,6 +13,9 @@ def index(request):
             color_count = int(form.cleaned_data['color_count'])
             colors = {'c1_new': form.cleaned_data['c1_new'], 'c1_old': form.cleaned_data['c1_old'],
                       'c2_new': form.cleaned_data['c2_new'], 'c2_old': form.cleaned_data['c2_old']}
+            """
+                If anyone sees the code below: I am sorry
+            """
             if color_count > 2:
                 colors['c3_new'] = form.cleaned_data['c3_new']
                 colors['c3_old'] = form.cleaned_data['c3_old']
@@ -22,6 +25,12 @@ def index(request):
                     if color_count > 4:
                         colors['c5_new'] = form.cleaned_data['c5_new']
                         colors['c5_old'] = form.cleaned_data['c5_old']
+                        if color_count > 5:
+                            colors['c6_new'] = form.cleaned_data['c6_new']
+                            colors['c6_old'] = form.cleaned_data['c6_old']
+                            if color_count > 6:
+                                colors['c7_new'] = form.cleaned_data['c7_new']
+                                colors['c7_old'] = form.cleaned_data['c7_old']
             result = handle_uploaded_file(
                 request.FILES.get('pdf'), colors, form.cleaned_data['prec'], form.cleaned_data['images'])
             context = {'form': form, 'pdf_b64': result.get(

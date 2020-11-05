@@ -72,6 +72,28 @@ def replace_colors(pdf_input, colors_input, prec, mode):
                                         entry[0][0] = newcolor[0]
                                         entry[0][1] = newcolor[1]
                                         entry[0][2] = newcolor[2]
+                                    if not colors_input.get('c6_old') is None:
+                                        if close_enough(entry[0], colors_input.get('c6_old'), prec):
+                                            print(entry[0][0], entry[0]
+                                                  [1], entry[0][2])
+                                            newcolor = colors_input.get(
+                                                'c6_new').split('-')
+                                            newcolor = [
+                                                int(x) / 255 for x in newcolor]
+                                            entry[0][0] = newcolor[0]
+                                            entry[0][1] = newcolor[1]
+                                            entry[0][2] = newcolor[2]
+                                        if not colors_input.get('c7_old') is None:
+                                            if close_enough(entry[0], colors_input.get('c7_old'), prec):
+                                                print(entry[0][0], entry[0]
+                                                      [1], entry[0][2])
+                                                newcolor = colors_input.get(
+                                                    'c7_new').split('-')
+                                                newcolor = [
+                                                    int(x) / 255 for x in newcolor]
+                                                entry[0][0] = newcolor[0]
+                                                entry[0][1] = newcolor[1]
+                                                entry[0][2] = newcolor[2]
                         print(entry[0][0])
 
             new_content_stream = pikepdf.unparse_content_stream(stream)

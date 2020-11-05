@@ -29,14 +29,24 @@ class MyForm(forms.Form):
                       required=False, initial='0-0-0')
 
     c4_old = RGBField(label='fourth Color to be replace',
-                      required=False, initial='250-192-144')
+                      required=False, initial='4-50-78')
     c4_new = RGBField(label='Color to replace fourth Color',
-                      required=False, initial='0-0-0')
+                      required=False, initial='255-255-255')
 
     c5_old = RGBField(label='fifth Color to be replace',
-                      required=False, initial='255-255-255')
+                      required=False, initial='74-85-104')
     c5_new = RGBField(label='Color to replace fifth Color',
+                      required=False, initial='255-255-255')
+
+    c6_old = RGBField(label='fifth Color to be replace',
+                      required=False, initial='242-242-242')
+    c6_new = RGBField(label='Color to replace fifth Color',
                       required=False, initial='0-0-0')
+
+    c7_old = RGBField(label='fifth Color to be replace',
+                      required=False, initial='74-85-104')
+    c7_new = RGBField(label='Color to replace fifth Color',
+                      required=False, initial='255-255-255')
 
     color_count = forms.IntegerField(
         widget=forms.HiddenInput(), initial=2, required=False)
