@@ -1,10 +1,10 @@
-from decimal import Decimal
 import pikepdf
-from pikepdf import Pdf, Page, Name, PdfImage
+from pikepdf import Pdf, Name, PdfImage
 from base64 import b64encode
 import io
 import zlib
-from PIL import Image, ImageOps
+from PIL import ImageOps
+import itertools
 
 
 def handle_uploaded_file(pdf, colors_input, prec, mode):
@@ -140,26 +140,66 @@ def close_enough(entry, color_input, prec):
     return abs(r1 - r2) < prec and abs(g1 - g2) < prec and abs(b1 - b2) < prec
 
 
+def ranges(iterable):
+    iterable = sorted(set(iterable))
+    for _, group in itertools.groupby(enumerate(iterable), lambda t: t[1] - t[0]):
+        group = list(group)
+        yield group[0][1], group[-1][1]
+
+
+def rgb_to_hex(r, g, b):
+    r = "{0:x}".format(int(r))
+    g = "{0:x}".format(int(g))
+    b = "{0:x}".format(int(b))
+    return f'#{r}{g}{b}'
+
+
 def new_analyse(pdf_input):
-    def mf(x):
-        return (int(x.split(' - ')[0]), int(x.split(' - ')[1]), int(x.split(' - ')[2]))
+    def beautifyPages(input):
+        if len(input) == 1:
+            return f'Page {input[0]}'
+        elif len(input) == 2:
+            return f'Pages {input[0]}+{input[1]}'
+        else:
+            ranges_list = list(ranges(input))
+            result = 'Pages '
+            for entry in ranges_list:
+                if entry[0] == entry[1]:
+                    result += f'{entry[0]}, '
+                else:
+                    result += f'{entry[0]}-{entry[1]}, '
+            return result[:-2]
 
-    all_colors = []
+    colors_dictionary = {}
     with Pdf.open(pdf_input) as pdf:
-        for x in range(len(pdf.pages)):
-            page = pdf.pages[x]
+        for pagenumber in range(len(pdf.pages)):
+            page = pdf.pages[pagenumber]
             stream = pikepdf.parse_content_stream(page)
-            for entry in stream:
-                if str(entry[1]).lower() == 'sc':
-                    string = ''
-                    for x in entry[0]:
-                        string += str(round(x * 255)) + " - "
-                    all_colors.append(string[:-3])
+            for stream_entry in stream:
+                if str(stream_entry[1]).lower() == 'sc':
+                    color_string = ''
+                    for color_decimal in stream_entry[0]:
+                        color_string += str('000' +
+                                            str(round(color_decimal * 255)))[-3:]
+                    if not color_string in colors_dictionary:
+                        colors_dictionary[color_string] = {'color': color_string,
+                                                           'count': 1, 'pages': [pagenumber + 1]}
+                    else:
+                        colors_dictionary[color_string]['count'] += 1
+                        colors_dictionary[color_string]['pages'].append(
+                            pagenumber + 1)
 
-        all_colors = list(set(all_colors))
-        all_colors.sort(key=mf)
-        res = []
-        for entry in all_colors:
-            res.append([str(entry.split(
-                ' - ')[0]), str(entry.split(' - ')[1]),  str(entry.split(' - ')[2])])
-        return res
+        result = []
+        with open('t.txt', 'w') as f:
+            colors_list = []
+            for color_key in colors_dictionary:
+                colors_dictionary[color_key]['pages'] = list(
+                    set(colors_dictionary[color_key]['pages']))
+                colors_list.append(colors_dictionary[color_key])
+
+            colors_list.sort(key=lambda x: len(x['pages']), reverse=True)
+            for entry in colors_list:
+                print(entry, file=f)
+                result.append([rgb_to_hex(str(entry['color'][:3]), str(
+                    entry['color'][3:6]), str(entry['color'][6:])), str(beautifyPages(entry['pages']))])
+        return result

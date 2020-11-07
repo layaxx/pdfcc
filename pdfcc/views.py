@@ -12,6 +12,8 @@ def analyse(request):
         if form.is_valid():
             result = new_analyse(request.FILES.get('pdf'))
             return render(request, 'pdfcc/analyse.html', {'res': result})
+        else:
+            print(form.errors)
     else:
         form = MyFormAnalyse()
     return render(request, 'pdfcc/analyse.html', {'form': form})
@@ -48,6 +50,8 @@ def index(request):
                 'b64'), 'pdf_filename': result.get('filename'), 'color_count': color_count}
             print(color_count)
             return render(request, 'pdfcc/index.html', context)
+        else:
+            print(form.errors)
     else:
         form = MyForm()
     return render(request, 'pdfcc/index.html', {'form': form, 'color_count': '2'})
