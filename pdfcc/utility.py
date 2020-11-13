@@ -148,10 +148,7 @@ def ranges(iterable):
 
 
 def rgb_to_hex(r, g, b):
-    r = "{0:x}".format(int(r))
-    g = "{0:x}".format(int(g))
-    b = "{0:x}".format(int(b))
-    return f'#{r}{g}{b}'
+    return '#%02x%02x%02x' % (int(r), int(g), int(b))
 
 
 def new_analyse(pdf_input):

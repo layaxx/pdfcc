@@ -11,12 +11,17 @@ def analyse(request):
         form = MyFormAnalyse(request.POST, request.FILES)
         if form.is_valid():
             result = new_analyse(request.FILES.get('pdf'))
-            return render(request, 'pdfcc/analyse.html', {'res': result})
+            return render(request, 'pdfcc/analyse.html', {'res': result, 'file': request.FILES.get('pdf')})
         else:
             print(form.errors)
     else:
         form = MyFormAnalyse()
     return render(request, 'pdfcc/analyse.html', {'form': form})
+
+
+def result(request):
+    print(list(request.FILES))
+    return HttpResponse("jo passt")
 
 
 def index(request):
