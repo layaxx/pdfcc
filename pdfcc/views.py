@@ -1,10 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import MyForm, MyFormAnalyse
 
 # Imaginary function to handle an uploaded file.
 from .utility import handle_uploaded_file, new_analyse
 
+
+def ajax(request):
+    if request.method == 'POST':
+       form = MyFormAnalyse(request.POST, request.FILES)
+       if form.is_valid():
+           return JsonResponse({'error': False, 'message': 'Uploaded Successfully', 'analysis_result': new_analyse(request.FILES.get('pdf'))})
+       else:
+           return JsonResponse({'error': True, 'errors': form.errors})
+    return render(request, 'pdfcc/ajax.html', {'form': MyFormAnalyse()})
 
 def analyse(request):
     if request.method == 'POST':
