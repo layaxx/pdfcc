@@ -7,6 +7,19 @@ from PIL import ImageOps
 import itertools
 
 
+def newest_replace(postData, old_pdf):
+    colorData = {}
+    for key in postData:
+        if len(key) == 7 and key[0] == '#':
+            if len(postData[key]) == 7 and postData[key][0] == '#':
+                colorData[key] = postData[key]
+    if len(colorData) == 0:
+        raise BaseException("No valid colors were provided")
+    new_pdf = b"replace_colors_new(colorData, old_pdf)"
+    b64 = str(b64encode(new_pdf))[2:-1]
+    return b64
+
+
 def handle_uploaded_file(pdf, colors_input, prec, mode):
     new_pdf = replace_colors(pdf, colors_input, prec, int(mode))
     return get_download_link(new_pdf, pdf.name)
@@ -163,6 +176,8 @@ def new_analyse(pdf_input):
             for entry in ranges_list:
                 if entry[0] == entry[1]:
                     result += f'{entry[0]}, '
+                elif entry[0] + 1 == entry[1]:
+                    result += f'{entry[0]}, {entry[1]}, '
                 else:
                     result += f'{entry[0]}-{entry[1]}, '
             return result[:-2]

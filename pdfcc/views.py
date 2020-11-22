@@ -3,17 +3,27 @@ from django.http import HttpResponse, JsonResponse
 from .forms import MyForm, MyFormAnalyse
 
 # Imaginary function to handle an uploaded file.
-from .utility import handle_uploaded_file, new_analyse
+from .utility import handle_uploaded_file, new_analyse, newest_replace
 
 
 def ajax(request):
     if request.method == 'POST':
-       form = MyFormAnalyse(request.POST, request.FILES)
-       if form.is_valid():
-           return JsonResponse({'error': False, 'message': 'Uploaded Successfully', 'analysis_result': new_analyse(request.FILES.get('pdf'))})
-       else:
-           return JsonResponse({'error': True, 'errors': form.errors})
+        form = MyFormAnalyse(request.POST, request.FILES)
+        if form.is_valid():
+            if len(request.POST) <= 1:
+                return JsonResponse({'error': False, 'message': 'Uploaded Successfully', 'analysis_result': new_analyse(request.FILES.get('pdf'))})
+            else:
+                try:
+                    b64 = newest_replace(
+                        request.POST, request.FILES.get('pdf'))
+                    return JsonResponse({'error': False, 'message': 'Substituted Successfully', 'b64': b64})
+                except BaseException as e:
+                    return JsonResponse({'error': True, 'message': str(e)})
+
+        else:
+            return JsonResponse({'error': True, 'message': 'Form was not valid. Please make sure you submitted a PDF.', 'errors': form.errors})
     return render(request, 'pdfcc/ajax.html', {'form': MyFormAnalyse()})
+
 
 def analyse(request):
     if request.method == 'POST':

@@ -183,6 +183,7 @@
 
 <body class="bg-light">
     <div class="container">
+
         <div class="py-5 text-center">
             <!--             <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" /> -->
             <h2>AJAX Colors in your PDF</h2>
@@ -190,19 +191,28 @@
                 This app analyses a given PDF and shows every color that is used in it (apart from images). Colors are ordered by the amount of pages they appear on.
             </p>
         </div>
+        <div id="success"></div>
+        <div id="progress-wrapper" class="py-5 text-center">
+            <div class="alert alert-light" role="alert" id="progress"></div>
+            <ul class="list-group list-group-horizontal">
+                <li id="progress-1" class="list-group-item flex-fill list-group-item-primary">Choose PDF</li>
+                <li id="progress-2" class="list-group-item flex-fill">Choose Colors</li>
+                <li id="progress-3" class="list-group-item flex-fill">Download new PDF</li>
+            </ul>
+        </div>
 
-        <div class="row">
+        <div id="row-form" class="row">
             <div class="col-md-12 order-md-1">
                 <h4 class="mb-3">PDF Document</h4>
                 <form enctype="multipart/form-data" id="id_ajax_upload_form" method="POST" novalidate="">
                     {% csrf_token %} {{form.as_p}}
+                    <div id="analysis_result" style="display: flex; flex-wrap: wrap">
+                    </div>
                     <input type="submit" />
                 </form>
             </div>
         </div>
-        <div id="analysis_result" style="display: flex; flex-wrap: wrap">
 
-        </div>
 
         <footer class="my-5 pt-5 text-muted text-center text-small">
             <p class="mb-1">
@@ -227,6 +237,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
         $('#analysis_result').hide();
+        $('#progress').hide();
+        let status = "analyse";
         // prevent reload
         window.addEventListener('beforeunload', function(e) {
             // Cancel the event
@@ -238,72 +250,108 @@
         $('#id_ajax_upload_form').submit(function(e) {
             e.preventDefault();
             $form = $(this)
+            $('#progress').show();
             var formData = new FormData(this);
-            $.ajax({
-                url: window.location.pathname,
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    $('.error').remove();
-                    console.log(response)
-                    if (response.error) {
-                        $.each(response.errors, function(name, error) {
-                            error = '<small class="text-muted error">' + error + '</small>'
-                            $form.find('[name=' + name + ']').after(error);
-                        })
-                    } else {
-                        /*  <div>
-                        <div class="colorcode" style="background-color: {{entry.0}};">
-                            <p style="background-color: black">{{entry.0}}</p>
-                        </div>
-                        <p style="width: 150px">{{entry.1}}</p>
-                        <label for="{{entry.0}}" style="text-align: left">replace with:</label>
-                          <br />
-                          <input id="{{entry.0}}" name="{{entry.0}}" type="text" />
-                        </div> */
-                        console.log(response.analysis_result.length);
-                        alert(response.message);
-                        for (entry in response.analysis_result) {
-                            let colorcode = response.analysis_result[entry][0];
-                            let pages = response.analysis_result[entry][1];
-                            let div_outer = document.createElement("div");
-                            let div_inner = document.createElement("div");
-                            div_inner.className = "colorcode";
-                            div_inner.style = "background-color: " + colorcode;
-                            let text_colorcode = document.createElement("p");
-                            text_colorcode.innerText = colorcode;
-                            div_inner.append(text_colorcode);
-                            div_outer.append(div_inner);
-                            let text_pages = document.createElement("p");
-                            text_pages.innerText = pages;
-                            text_pages.style = "margin-left: 10px;";
-                            div_outer.append(text_pages);
-                            let label = document.createElement("label");
-                            label.for = colorcode;
-                            label.style = "text-align: left";
-                            label.innerText = "replace with:"
-                            let input = document.createElement("input");
-                            input.id = colorcode;
-                            input.name = colorcode;
-                            input.type = "text";
-                            input.className = "floating-input";
-                            input.placeholder = " ";
-                            div_input = document.createElement("div");
-                            div_input.className = "floating-label";
-                            span1 = document.createElement("span");
-                            span1.className = "highlight";
-                            div_input.append(input, span1, label);
-                            div_outer.append(div_input);
-                            $('#analysis_result').append(div_outer);
+            if (status === "analyse") {
+                $("#progress").text("Uploading data to Server...");
+                $("#progress").removeClass("alert-danger");
+                $("#progress").addClass("alert-light");
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('.error').remove();
+                        console.log(response)
+                        if (response.error) {
+                            $("#progress").text("There was an error: " + response.message);
+                            $("#progress").removeClass("alert-light");
+                            $("#progress").addClass("alert-danger");
+                            $.each(response.errors, function(name, error) {
+                                error = '<small class="text-muted error">' + error + '</small>'
+                                $form.find('[name=' + name + ']').after(error);
+                            })
+                        } else {
+                            for (entry in response.analysis_result) {
+                                let colorcode = response.analysis_result[entry][0];
+                                let pages = response.analysis_result[entry][1];
+                                let div_outer = document.createElement("div");
+                                div_outer.style = "width: 180px;";
+                                let div_inner = document.createElement("div");
+                                div_inner.className = "colorcode";
+                                div_inner.style = "background-color: " + colorcode;
+                                let text_colorcode = document.createElement("p");
+                                text_colorcode.innerText = colorcode;
+                                div_inner.append(text_colorcode);
+                                div_outer.append(div_inner);
+                                let text_pages = document.createElement("p");
+                                text_pages.innerText = pages;
+                                text_pages.style = "margin-left: 10px;";
+                                div_outer.append(text_pages);
+                                let label = document.createElement("label");
+                                label.for = colorcode;
+                                label.style = "text-align: left";
+                                label.innerText = "replace with:"
+                                let input = document.createElement("input");
+                                input.id = colorcode;
+                                input.name = colorcode;
+                                input.type = "text";
+                                input.className = "floating-input";
+                                input.placeholder = " ";
+                                div_input = document.createElement("div");
+                                div_input.className = "floating-label";
+                                span1 = document.createElement("span");
+                                span1.className = "highlight";
+                                div_input.append(input, span1, label);
+                                div_outer.append(div_input);
+                                $('#analysis_result').append(div_outer);
+                            }
+                            $('#analysis_result').show();
+                            $('#id_pdf').hide();
+                            $("#progress-1").addClass("list-group-item-secondary");
+                            $("#progress-1").removeClass("list-group-item-primary");
+                            $("#progress-2").addClass("list-group-item-primary");
+                            status = "process"
+                            $("#progress").text("Uploading sucessfull. Please specify colors to be substituted.");
                         }
-                        $('#id_ajax_upload_form').hide();
-                        $('#analysis_result').show();
-                    }
-                },
-                cache: false,
-                contentType: false,
-                processData: false
-            });
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            } else {
+                $("#progress").text("Uploading data to Server...");
+                $("#progress").removeClass("alert-danger");
+                $("#progress").addClass("alert-light");
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('.error').remove();
+                        console.log(response)
+                        if (response.error) {
+                            $("#progress").text("There was an error: " + response.message);
+                            $("#progress").removeClass("alert-light");
+                            $("#progress").addClass("alert-danger");
+                            $([document.documentElement, document.body]).animate({
+                                scrollTop: $("#progress").offset().top
+                            }, 200);
+                        } else {
+                            $('#success').show();
+                            $('#success').append(document.createElement("p").innerText = "Successfully Substituted Colors in your PDF");
+                            $("#progress-2").addClass("list-group-item-secondary");
+                            $("#progress-2").removeClass("list-group-item-primary");
+                            $("#progress-3").addClass("list-group-item-success");
+                            $("#progress").text("Successfully Substituted Colors in your PDF.");
+                            $("#row-form").hide();
+                        }
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            }
         });
         // end
     </script>
