@@ -14,9 +14,9 @@ def ajax(request):
                 return JsonResponse({'error': False, 'message': 'Uploaded Successfully', 'analysis_result': new_analyse(request.FILES.get('pdf'))})
             else:
                 try:
-                    b64 = newest_replace(
+                    b64, number_of_colors = newest_replace(
                         request.POST, request.FILES.get('pdf'))
-                    return JsonResponse({'error': False, 'message': 'Substituted Successfully', 'b64': b64})
+                    return JsonResponse({'error': False, 'message': 'Substituted Successfully', 'b64': b64, 'noc': number_of_colors})
                 except BaseException as e:
                     return JsonResponse({'error': True, 'message': str(e)})
 

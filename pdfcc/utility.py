@@ -17,7 +17,7 @@ def newest_replace(postData, old_pdf):
         raise BaseException("No valid colors were provided")
     new_pdf = b"replace_colors_new(colorData, old_pdf)"
     b64 = str(b64encode(new_pdf))[2:-1]
-    return b64
+    return b64, len(colorData)
 
 
 def handle_uploaded_file(pdf, colors_input, prec, mode):
