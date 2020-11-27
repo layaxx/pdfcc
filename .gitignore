@@ -119,4 +119,4 @@ t.txt
 .vscode/settings.json
 .vscode/settings.json
 
-.pdfcc/static/admin/*
+pdfcc/static/admin/*
