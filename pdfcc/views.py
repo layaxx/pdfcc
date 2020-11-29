@@ -11,7 +11,11 @@ def ajax(request):
         form = MyFormAnalyse(request.POST, request.FILES)
         if form.is_valid():
             if len(request.POST) <= 1:
-                return JsonResponse({'error': False, 'message': 'Uploaded Successfully', 'analysis_result': new_analyse(request.FILES.get('pdf'))})
+                color_list = new_analyse(request.FILES.get('pdf'))
+                if len(color_list) < 1:
+                    return JsonResponse({'error': True, 'message': 'No Colors found in PDF', 'analysis_result': color_list})
+                else:
+                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully', 'analysis_result': color_list})
             else:
                 try:
                     b64, number_of_colors = newest_replace(
