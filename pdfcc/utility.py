@@ -7,17 +7,44 @@ from PIL import ImageOps
 import itertools
 
 
-def newest_replace(postData, old_pdf):
-    colorData = {}
-    for key in postData:
+def newest_replace(post_data, old_pdf):
+    list_of_valid_colors = {}
+    for key in post_data:
         if len(key) == 7 and key[0] == '#':
-            if len(postData[key]) == 7 and postData[key][0] == '#':
-                colorData[key] = postData[key]
-    if len(colorData) == 0:
+            if len(post_data[key]) == 7 and post_data[key][0] == '#':
+                list_of_valid_colors[key] = post_data[key]
+    if len(list_of_valid_colors) == 0:
         raise BaseException("No valid colors were provided")
-    new_pdf = b"replace_colors_new(colorData, old_pdf)"
+    new_pdf = replace_colors_new(list_of_valid_colors, old_pdf)
     b64 = str(b64encode(new_pdf))[2:-1]
-    return b64, len(colorData)
+    return b64, len(list_of_valid_colors)
+
+
+def replace_colors_new(list_of_colors, old_pdf):
+    with Pdf.open(old_pdf) as pdf:
+        for pageindex in range(len(pdf.pages)):
+            page = pdf.pages[pageindex]
+            content_stream = pikepdf.parse_content_stream(page)
+            for entry in content_stream:
+                if str(entry[1]).lower() == 'sc':
+                    color_old_red = round(entry[0][0] * 255)
+                    color_old_green = round(entry[0][1] * 255)
+                    color_old_blue = round(entry[0][2] * 255)
+                    color_old_hexcode = rgb_to_hex(
+                        color_old_red, color_old_green, color_old_blue)
+                    color_new_hexcode = list_of_colors.get(
+                        color_old_hexcode, color_old_hexcode)
+                    if not color_new_hexcode == color_old_hexcode:
+                        color_new_rgb_list = hex_to_rgb(color_new_hexcode)
+                        print(color_new_hexcode, color_new_rgb_list)
+                        entry[0][0] = color_new_rgb_list[0]
+                        entry[0][1] = color_new_rgb_list[1]
+                        entry[0][2] = color_new_rgb_list[2]
+            content_stream_new = pikepdf.unparse_content_stream(content_stream)
+            page.Contents = pdf.make_stream(content_stream_new)
+        stream_output = io.BytesIO()
+        pdf.save(stream_output)
+    return bytes(stream_output.getvalue())
 
 
 def handle_uploaded_file(pdf, colors_input, prec, mode):
@@ -123,7 +150,7 @@ def replace_colors(pdf_input, colors_input, prec, mode):
                                    filter=Name("/FlateDecode"))
                     rawimage.ColorSpace = Name("/DeviceGray")
 
-            if mode == 2:
+            elif mode == 2:
                 for rawimagecode in page.images:
                     rawimage = page.images[rawimagecode]
                     pdfimage = PdfImage(rawimage)
@@ -162,6 +189,13 @@ def ranges(iterable):
 
 def rgb_to_hex(r, g, b):
     return '#%02x%02x%02x' % (int(r), int(g), int(b))
+
+
+def hex_to_rgb(hexcode):
+    r = int(hexcode[1:3], base=16)
+    g = int(hexcode[3:5], base=16)
+    b = int(hexcode[5:7], base=16)
+    return [r/255, g/255, b/255]
 
 
 def new_analyse(pdf_input):
