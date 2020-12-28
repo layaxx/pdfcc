@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import './style.css';
+import 'jquery';
 
 function FileUpload(prop: { showColors: (colorArray: Array<Array<String>>, file: File) => void }) {
     const [isValid, setIsValid] = useState(false);
