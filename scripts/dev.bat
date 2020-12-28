@@ -1,0 +1,1 @@
+start cmd /c scripts\backend.bat & start cmd /c scripts\frontend.bat
