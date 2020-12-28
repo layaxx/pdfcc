@@ -1,1 +1,1 @@
-web: gunicorn background/playground.wsgi & bash scripts/deploy.sh
+web: gunicorn backend/playground.wsgi & bash scripts/deploy.sh
