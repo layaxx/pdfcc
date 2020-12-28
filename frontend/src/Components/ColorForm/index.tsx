@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import update from 'immutability-helper';
 import Alert from 'react-bootstrap/Alert';
-import 'jquery';
 
 function ColorForm(props: { state: () => any, handleChange: (b64: string) => any }) {
     const state = props.state();
@@ -98,12 +97,18 @@ function ColorForm(props: { state: () => any, handleChange: (b64: string) => any
                             formState.mapOldColorsToNewColors.forEach((value, key) => {
                                 data.append(key, value);
                             });
-                            console.log(data);
-                            $.ajax({
-                                type: "POST",
-                                url: "/ajax/process",
-                                data: data,
-                                success: (response) => {
+                            fetch("/ajax/process", {
+                                method: 'POST',
+                                body: data
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw Error(response.statusText);
+                                    }
+                                    return response;
+                                })
+                                .then(response => response.json())
+                                .then(response => {
                                     if (response.error) {
                                         setFormState((state) => update(state, {
                                             alert: {
@@ -115,21 +120,16 @@ function ColorForm(props: { state: () => any, handleChange: (b64: string) => any
                                     } else {
                                         props.handleChange(response.b64);
                                     }
-                                },
-                                error: (response) => {
+                                })
+                                .catch(function (error) {
                                     setFormState((state) => update(state, {
                                         alert: {
                                             active: { $set: true },
                                             type: { $set: "danger" },
-                                            msg: { $set: "Request failed: " + response.status }
+                                            msg: { $set: "Request failed: " + error }
                                         }
                                     }));
-                                    console.log(response);
-                                },
-                                cache: false,
-                                contentType: false,
-                                processData: false
-                            });
+                                });
                         }
                     })
                 }

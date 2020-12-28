@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import './style.css';
-import 'jquery';
+
 
 function FileUpload(prop: { showColors: (colorArray: Array<Array<String>>, file: File) => void }) {
     const [isValid, setIsValid] = useState(false);
@@ -60,24 +60,28 @@ function FileUpload(prop: { showColors: (colorArray: Array<Array<String>>, file:
                         const pdf = file as Blob;
                         data.append('file', pdf);
                         setAlertState({ message: "Waiting for Server response", type: "info" });
-                        $.ajax({
-                            type: "POST",
-                            url: "/ajax/react",
-                            data: data,
-                            success: (response) => {
+                        fetch("/ajax/react", {
+                            method: 'POST',
+                            body: data
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw Error(response.statusText);
+                                }
+                                return response;
+                            })
+                            .then(response => response.json())
+                            .then(response => {
                                 if (response.error) {
-                                    setAlertState({ message: "AJAX POST came back with error: " + response.message, type: "danger" });
+                                    setAlertState({ message: "Server responded with error message: " + response.message, type: "danger" });
                                 } else {
                                     prop.showColors(response.analysis_result, file as File);
                                 }
-                            },
-                            error: (response) => {
-                                setAlertState({ message: 'Server Error: ' + response.statusCode, type: "danger" })
-                            },
-                            cache: false,
-                            contentType: false,
-                            processData: false
-                        });
+
+                            })
+                            .catch(function (error) {
+                                setAlertState({ message: error, type: "danger" });
+                            });
                     } else {
                         setAlertState({ message: "Please select a Document first", type: "warning" });
                     }
