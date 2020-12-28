@@ -1,9 +1,0 @@
-{
-    "name": "dummy_package",
-    "version": "0.1.0",
-    "private": true,
-     "scripts": {
-        "start": "echo test"
-      }
-  }
-  
