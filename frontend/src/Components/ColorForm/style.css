@@ -1,0 +1,25 @@
+.analysis_result {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: space-evenly;
+}
+
+.analysis_result>div {
+    margin: 1em;
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid gray;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .03);
+    padding-bottom: 20px;
+}
+
+.btn {
+    width: 70%;
+    margin: auto;
+    margin-top: 5em;
+    font-weight: bold;
+}
