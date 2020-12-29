@@ -7,6 +7,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import update from 'immutability-helper';
 import Alert from 'react-bootstrap/Alert';
 
+// TODO: exclude pages
+
 function ColorForm(props: { state: () => any, handleChange: (b64: string) => any }) {
     const state = props.state();
     const colors = state.colors;
