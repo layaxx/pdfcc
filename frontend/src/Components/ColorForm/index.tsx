@@ -49,6 +49,13 @@ function ColorForm(props: { state: () => any, handleChange: (b64: string) => any
                             mapOldColorsToNewColors: { $add: [[color, newColor]] },
                             errors: { $remove: [color] }
                         }));
+                        if (formState.alert.msg === "No valid Colors were provided") {
+                            setFormState((state) => update(state, {
+                                alert: {
+                                    active: { $set: false },
+                                }
+                            }));
+                        }
                     }
                 }}
                 key={index}
@@ -72,7 +79,7 @@ function ColorForm(props: { state: () => any, handleChange: (b64: string) => any
                         animation="border"
                         role="status"
                         hidden={formState.alert.msg !== "Waiting for Server response..."}></Spinner>
-                    {formState.alert.msg + (formState.errors.size !== 0 ? Array.from(formState.errors).join(", ") : "")}
+                    {(formState.errors.size !== 0 ? "You submitted invalid new colors for: " + Array.from(formState.errors).join(", ") : formState.alert.msg)}
                 </Alert>
             </div>
             <Button type="submit"
@@ -132,6 +139,14 @@ function ColorForm(props: { state: () => any, handleChange: (b64: string) => any
                                         }
                                     }));
                                 });
+                        } else {
+                            setFormState((state) => update(state, {
+                                alert: {
+                                    active: { $set: true },
+                                    type: { $set: "danger" },
+                                    msg: { $set: "No valid Colors were provided" }
+                                }
+                            }));
                         }
                     })
                 }

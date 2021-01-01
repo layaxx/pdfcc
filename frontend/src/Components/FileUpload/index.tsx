@@ -80,7 +80,7 @@ function FileUpload(prop: { showColors: (colorArray: Array<Array<String>>, file:
 
                             })
                             .catch(function (error) {
-                                setAlertState({ message: error, type: "danger" });
+                                setAlertState({ message: "" + error, type: "danger" });
                             });
                     } else {
                         setAlertState({ message: "Please select a Document first", type: "warning" });
