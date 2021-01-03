@@ -21,7 +21,7 @@ class color:
                 self.g = int(color_identifier[2:4], base=16)
                 self.b = int(color_identifier[4:6], base=16)
             else:
-                raise Exception("Invalid Input 1")
+                raise Exception("Invalid Input")
         elif type(color_identifier) is list:
             self.r = int(color_identifier[0] * 255)
             self.g = int(color_identifier[1] * 255)

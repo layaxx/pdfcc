@@ -34,8 +34,6 @@ def process_request(post_data, old_pdf):
     # Part 1: extract color data from POST data
     dict_of_valid_colors = {}
     for key in post_data:
-        print(key, isValidColor(key))
-        print(post_data[key], isValidColor(post_data[key]))
         if isValidColor(key) and isValidColor(post_data[key]):
             dict_of_valid_colors[key.replace(
                 '#', '')] = color(post_data[key])
