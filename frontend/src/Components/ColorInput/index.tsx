@@ -1,111 +1,152 @@
 
-import React, { CSSProperties, useState } from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl'
-import './style.css'
+import FormControl from 'react-bootstrap/FormControl';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import './style.css';
 
-function isValidChar(character: string) {
-    return (character >= 'a' && character <= 'f')
-        || (character >= 'A' && character <= 'F')
-        || (character >= '0' && character <= '9');
+enum COLORSTATUS {
+    empty = "empty",
+    valid = "valid",
+    invalid = "invalid",
+    same = "same",
+    incomplete = "incomplete"
 }
 
-function isValidColor(color: string): boolean {
-    if (color.length === 6) {
-        for (let i = 0; i < 6; i++) {
-            if (!isValidChar(color.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    } else if (color.length === 7 && color.charAt(0) === '#') {
-        for (let i = 1; i < 7; i++) {
-            if (color.charAt(i) < 'a' || color.charAt(i) < 'f') {
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
-}
-
+const messageLookup = new Map<COLORSTATUS, string>([
+    [COLORSTATUS.empty, "No Color provided"],
+    [COLORSTATUS.valid, "Valid Color provided"],
+    [COLORSTATUS.invalid, "Color is invalid"],
+    [COLORSTATUS.same, "Color is not new"],
+    [COLORSTATUS.incomplete, "Color must have 6 characters"]
+]);
 
 function ColorInput(props: {
     color: string,
     pages: string,
     updateColors: (color: string, newColor: string | null) => any
 }) {
-    const id_input = "input-" + props.color;
-    const id_preview = "pre-" + props.color;
 
-    const [newValue, setNewValue] = useState("");
+    function copyColorcode(event: React.MouseEvent): void {
+        const htmlparagraph_colorcode = event.target as HTMLParagraphElement;
+        const temp_input_elem = document.createElement("input");
+        temp_input_elem.value = props.color;
+        htmlparagraph_colorcode.after(temp_input_elem);
+        temp_input_elem.select()
+        document.execCommand("copy");
+        temp_input_elem.remove();
+    }
 
-    // not sure why the as any is needed in the line below, but it doesn´t work without it
-    const style_colorcode: CSSProperties = { ["backgroundColor" as any]: props.color };
+    const handleOnBlur = () => {
+        switch (status) {
+            case COLORSTATUS.empty:
+            case COLORSTATUS.same:
+                props.updateColors(props.color, "");
+                break;
+            case COLORSTATUS.valid:
+                props.updateColors(props.color, value);
+                break;
+            case COLORSTATUS.invalid:
+            case COLORSTATUS.incomplete:
+            default:
+                props.updateColors(props.color, null);
+                break;
+        }
+    }
+
+    const handleOnChange = (event: React.ChangeEvent) => {
+        const nval = (event.target as HTMLInputElement)
+            .value
+            .replace(/[^a-f0-9]/gi, '')
+            .substring(0, 6)
+            .toLowerCase();
+        switch (nval.length) {
+            case 0:
+                // input is empty string => reset entry
+                // => display default indicator
+                setStatus(COLORSTATUS.empty)
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                // color code is invalid as it is less than 6 characters but can still become valid
+                // => display soem other indicator
+                setStatus(COLORSTATUS.incomplete);
+                break;
+            case 6:
+                if (nval === props.color.replace(/[^a-f0-9]/gi, '')) {
+                    // color code is valid but same as original color
+                    // => display orange indicator
+                    setStatus(COLORSTATUS.same)
+                } else {
+                    // color code is valid and not same as original color
+                    // => display green indicator and color preview
+                    setStatus(COLORSTATUS.valid);
+                }
+                break;
+            default:
+                // color code is invalid
+                // => display red indicator
+                // should not be reachable
+                setStatus(COLORSTATUS.invalid);
+        }
+        setValue(nval);
+        return;
+    }
+
+    const [status, setStatus] = useState(COLORSTATUS.empty);
+    const [value, setValue] = useState("");
+
     return (
         <div>
-            <div className="colorcode" style={style_colorcode}>
-                <div id={id_preview} className="right-side" style={{ backgroundColor: newValue, display: newValue === "" ? "None" : "block" }}></div>
-                <p onClick={(event: React.MouseEvent) => {
-                    const htmlparagraph_colorcode = event.target as HTMLParagraphElement;
-                    const temp_input_elem = document.createElement("input");
-                    temp_input_elem.value = htmlparagraph_colorcode.textContent != null ? htmlparagraph_colorcode.textContent : "";
-                    htmlparagraph_colorcode.after(temp_input_elem);
-                    temp_input_elem.select()
-                    document.execCommand("copy");
-                    temp_input_elem.remove();
-                }}>{props.color}</p></div>
+            <div className="colorcode" style={{ backgroundColor: props.color }}>
+                <div
+                    id={`pre-${props.color}`}
+                    className="right-side"
+                    style={{ backgroundColor: `#${value}`, display: status === COLORSTATUS.valid ? "block" : "None" }}
+                ></div>
+                <p
+                    onClick={copyColorcode}>{props.color}
+                </p>
+            </div>
             <p className="pages">{props.pages}</p>
-            <InputGroup>
-                <InputGroup.Prepend>
-                    <InputGroup.Text id={id_input} >#</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                    placeholder="new Color"
-                    aria-placeholder="new Color"
-                    aria-label="new Color"
-                    aria-describedby={id_input}
-                    onBlur={(event: React.FocusEvent) => {
-                        const value = (event.target as HTMLInputElement).value;
-                        const hashtag_thingy_style = (event.target?.parentNode?.children[0].children[0] as HTMLDivElement).style;
-                        if (!(value.length === 0 || value.length === 6 || value.length === 7)) {
-                            // Input Element is invalid color => display red, add warning
-                            hashtag_thingy_style.backgroundColor = "#dc3545";
-                            hashtag_thingy_style.color = "white";
-                            props.updateColors(props.color, null);
-                            setNewValue("");
-                        }
-                    }}
-                    onChange={(event: React.ChangeEvent) => {
-                        const value = (event.target as HTMLInputElement).value;
-                        const hashtag_thingy_style = (event.target?.parentNode?.children[0].children[0] as HTMLDivElement).style;
-                        if (value.length === 0) {
-                            if (value === "") {
-                                // Input Element is empty => reset to default
-                                hashtag_thingy_style.backgroundColor = "#e9ecef";
-                                hashtag_thingy_style.color = "black";
-                                props.updateColors(props.color, "");
-                                setNewValue("");
-                            }
-                        } else if (value.length === 6 || value.length === 7) {
-                            if (isValidColor(value)) {
-                                // Input Element is valid color => display green, add to state
-                                hashtag_thingy_style.backgroundColor = "#28a745";
-                                hashtag_thingy_style.color = "white";
-                                props.updateColors(props.color, value);
-                                setNewValue("#" + value);
-                            } else {
-                                // Input Element is invalid color => display red, add warning
-                                hashtag_thingy_style.backgroundColor = "#dc3545";
-                                hashtag_thingy_style.color = "white";
-                                props.updateColors(props.color, null);
-                                setNewValue("");
-                            }
-                        }
-                    }}
-                />
-            </InputGroup >
+            <OverlayTrigger
+                placement="bottom-start"
+                transition={false} // necessary to prevent deprecation warning for findDOMNode
+                overlay={
+                    <Tooltip
+                        id={`tooltip-id-${props.color}`}
+                        show={status !== COLORSTATUS.empty}
+                    >
+                        {messageLookup.get(status)}
+                    </Tooltip>}
+            >
+                {({ ref, ...triggerHandler }) => (
+                    <InputGroup
+                        {...triggerHandler}>
+                        <InputGroup.Prepend>
+                            <InputGroup.Text
+                                ref={ref}
+                                id={`input-${props.color}`}
+                                className={status}
+                            >#</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <FormControl
+                            placeholder="new Color"
+                            aria-placeholder="new Color"
+                            aria-label="new Color"
+                            aria-describedby={`input-${props.color}`}
+                            value={value}
+                            onBlur={handleOnBlur}
+                            onChange={handleOnChange}
+                        />
+                    </InputGroup >
+                )}
+            </OverlayTrigger>
         </div >
     );
 }

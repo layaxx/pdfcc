@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,13 +24,6 @@ SECRET_KEY = "os.environ.get('SECRET_KEY')" if os.environ.get(
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000',
-#     'http://localhost:8000',
-#     "http://127.0.0.1:8000",
-#     "http://127.0.0.1:3000",
-# ]
 
 # Application definition
 
