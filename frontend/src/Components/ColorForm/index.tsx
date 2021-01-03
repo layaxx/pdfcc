@@ -6,10 +6,14 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import update from 'immutability-helper';
 import Alert from 'react-bootstrap/Alert';
+import beforeUnloadListener from '../listeners';
 
 // TODO: exclude pages
 
 function ColorForm(props: { state: () => any, handleChange: (b64: string) => any }) {
+    // ask for confirmation before leaving page
+    window.addEventListener('beforeunload', beforeUnloadListener);
+
     const state = props.state();
     const colors = state.colors;
     const file = state.file;
