@@ -18,6 +18,7 @@ It is provided as-is and there will probably not be any major updates in the fut
   - [Plans for the Future](#plans-for-the-future)
 
 ## Motivation
+The idea for this project came to me when a fellow student asked our professor if he could provide an alternate version of the presentation slides. The original version had white text on a dark background, which meant that printing them was a waste of toner. The professor then stated that he did not know a way to automate the task, which got me curious. After a few days I had the first prototype ready: It certainly did not automate the entire job, but it did make it easier than manual adjustments.
 
 ## What PDFCC can do
 PDF Color Changer can detect colors that are used in a PDF, for example as font color, background color or color of objects.
