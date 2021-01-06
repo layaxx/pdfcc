@@ -4,18 +4,17 @@ from base64 import b64encode
 from .color import color
 
 
-def isValidColor(hexcode):
+def is_valid_color(hexcode):
     '''
     takes string as input and returns Boolean
     returns True iff the provided input is a valid hex color code
-    This function does not care wether input has # prefix
+    This function does not care wether input has # prefix or not
     '''
     hexcode = hexcode.lower()
     valid_characters = ['0', '1', '2', '3', '4', '5', '6',
                         '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
-    if len(hexcode) == 7:
-        if hexcode[0] == '#':
-            hexcode = hexcode[1:7]
+    if len(hexcode) == 7 and hexcode[0] == '#':
+        hexcode = hexcode[1:7]
     if len(hexcode) == 6:
         for char in hexcode:
             if not char in valid_characters:
@@ -34,12 +33,12 @@ def process_request(post_data, old_pdf):
     # Part 1: extract color data from POST data
     dict_of_valid_colors = {}
     for key in post_data:
-        if isValidColor(key) and isValidColor(post_data[key]):
+        if is_valid_color(key) and is_valid_color(post_data[key]):
             dict_of_valid_colors[key.replace(
                 '#', '')] = color(post_data[key])
     if len(dict_of_valid_colors) == 0:
         # raise Exception if no valid entries are found
-        raise BaseException("No valid colors were provided")
+        raise ValueError("No valid colors were provided")
 
     # Part 2: generate a new PDF
     new_pdf = replace_colors(dict_of_valid_colors, old_pdf)
@@ -65,11 +64,11 @@ def replace_colors(dict_of_colors, old_pdf):
             content_stream = pikepdf.parse_content_stream(page)
             for entry in content_stream:
                 if entry[1] in list_of_operators:
-                    color_old_hexcode = color(entry[0]).asHex()
+                    color_old_hexcode = color(entry[0]).get_hex()
                     color_new = dict_of_colors.get(
                         color_old_hexcode, color(color_old_hexcode))
-                    if not color_new.asHex() == color_old_hexcode:
-                        color_new_rgb_list = color_new.asRGB1()
+                    if not color_new.get_hex() == color_old_hexcode:
+                        color_new_rgb_list = color_new.get_rgb_1()
                         entry[0][0] = color_new_rgb_list[0]
                         entry[0][1] = color_new_rgb_list[1]
                         entry[0][2] = color_new_rgb_list[2]

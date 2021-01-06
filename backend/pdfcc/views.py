@@ -31,12 +31,12 @@ def process(request):
     for both identifier and value
     '''
     try:
-        # try to handle input and return new PDF encoded as Base64 if no Exeptions occur
+        # try to handle input and return new PDF encoded as Base64 if no Exceptions occur
         b64 = process_request(
             request.POST, request.FILES.get('file'))
         return JsonResponse({'error': False, 'message': 'Substituted Successfully', 'b64': b64})
-    except BaseException as e:
-        # if an Exeption is raised during handling of the input, return the error message
+    except ValueError as e:
+        # if an Exception is raised during handling of the input, return the error message
         # most likely cause for this is if no (valid) colors are provided for substitution
         return JsonResponse({'error': True, 'message': str(e)})
 

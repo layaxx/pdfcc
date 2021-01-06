@@ -14,13 +14,35 @@
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div class="container">
     <div class="py-5 text-center">
-      <h2>Analyse and Change Colors in your PDF</h2>
+      <h1>Analyse and Change Colors in your PDF</h1>
       <p>
         This app analyses a given PDF and shows every color that is used in it (apart from images). Colors are ordered
         by the amount of pages they appear on. You can then specify new colors to replace the old ones. Please specify
-        your colors as <a href="https://www.w3schools.com/colors/colors_hexadecimal.asp" target="_blank">6-digit
-          hex-code.</a>
+        your colors as <a href="https://www.w3schools.com/colors/colors_hexadecimal.asp" target="_blank"
+          rel="noopener">6-digit hex-code.</a>
       </p>
+      <a href="https://github.com/layaxx/pdfcc/blob/master/README.md" target="_blank" rel="noopener">About this
+        project</a>
+      <h2 style="margin-top: 2em;">PDF Color Changer...</h2>
+      <div class="row">
+        <div class="col">
+          <h3>... can:</h3>
+          <ul style="text-align: left">
+            <li><b>analyze colors</b> used in a PDF</li>
+            <li><b>substitute colors</b> used in a PDF</li>
+            <li>process PDFs <b>up to 15MB</b> in size</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3>... cannot:</h3>
+          <ul style="text-align: left">
+            <li>analyze or substitute colors used <br>
+              <b>inside an image</b> embedded in a PDF
+            </li>
+          </ul>
+        </div>
+      </div>
+
     </div>
 
     <div id="root"></div>
@@ -32,7 +54,7 @@
       <ul class="list-inline">
         <!-- <li class="list-inline-item"><a href="https://y-lang.eu/projects/pdfcc">Blogpost</a></li> -->
         <li class="list-inline-item"><a href="https://github.com/layaxx/pdfcc">GitHub</a></li>
-        <li class="list-inline-item"><a href="https://github.com/layaxx/pdfcc/issues">Bugreport</a></li>
+        <li class="list-inline-item"><a href="https://github.com/layaxx/pdfcc/issues">Bug-Report</a></li>
       </ul>
     </footer>
   </div>

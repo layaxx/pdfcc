@@ -14,7 +14,7 @@ def ranges(iterable):
         yield group[0][1], group[-1][1]
 
 
-def beautifyPages(input):
+def human_readable_string_from_list_of_pages(input):
     '''
     Takes a list of page numbers as input
     Returns a string with human readable version of page ranges
@@ -57,7 +57,7 @@ def analyse_colors(pdf_input):
                 filter(lambda x: x[1] in list_of_operators, stream))
 
             unique_colors = list(
-                set(['#' + color(x[0]).asHex() for x in filtered_stream]))
+                set(['#' + color(x[0]).get_hex() for x in filtered_stream]))
 
             for colorcode in unique_colors:
                 if colorcode in colors_dictionary:
@@ -70,4 +70,4 @@ def analyse_colors(pdf_input):
 
         colors_list.sort(key=lambda x: len(x[1]), reverse=True)
 
-        return [(k, beautifyPages(v)) for k, v in colors_list]
+        return [(k, human_readable_string_from_list_of_pages(v)) for k, v in colors_list]
