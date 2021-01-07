@@ -121,3 +121,6 @@ STATIC_ROOT = os.path.join(os.path.join(BASE_DIR, 'pdfcc'), 'static')
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# allow all files to be handled in memory
+FILE_UPLOAD_MAX_MEMORY_SIZE = 15728640
