@@ -30,13 +30,13 @@ function ColorInput(props: {
 }) {
 
     function copyColorcode(event: React.MouseEvent): void {
-        const htmlparagraph_colorcode = event.target as HTMLParagraphElement;
-        const temp_input_elem = document.createElement("input");
-        temp_input_elem.value = props.color;
-        htmlparagraph_colorcode.after(temp_input_elem);
-        temp_input_elem.select()
+        const htmlparagraphColorcode = event.target as HTMLParagraphElement;
+        const tempInputElem = document.createElement("input");
+        tempInputElem.value = props.color;
+        htmlparagraphColorcode.after(tempInputElem);
+        tempInputElem.select()
         document.execCommand("copy");
-        temp_input_elem.remove();
+        tempInputElem.remove();
     }
 
     const handleOnBlur = () => {
@@ -57,12 +57,12 @@ function ColorInput(props: {
     }
 
     const handleOnChange = (event: React.ChangeEvent) => {
-        const nval = (event.target as HTMLInputElement)
+        const newValue = (event.target as HTMLInputElement)
             .value
             .replace(/[^a-f0-9]/gi, '')
             .substring(0, 6)
             .toLowerCase();
-        switch (nval.length) {
+        switch (newValue.length) {
             case 0:
                 // input is empty string => reset entry
                 // => display default indicator
@@ -78,7 +78,7 @@ function ColorInput(props: {
                 setStatus(COLORSTATUS.incomplete);
                 break;
             case 6:
-                if (nval === props.color.replace(/[^a-f0-9]/gi, '')) {
+                if (newValue === props.color.replace(/[^a-f0-9]/gi, '')) {
                     // color code is valid but same as original color
                     // => display orange indicator
                     setStatus(COLORSTATUS.same)
@@ -94,7 +94,7 @@ function ColorInput(props: {
                 // should not be reachable
                 setStatus(COLORSTATUS.invalid);
         }
-        setValue(nval);
+        setValue(newValue);
         return;
     }
 

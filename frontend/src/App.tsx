@@ -12,8 +12,6 @@ enum Progress {
   submittedColors = 2
 }
 
-
-
 type ComponentMap = { [key in Progress]: JSX.Element | null }
 
 class App extends React.Component<{}, { colors: Array<Array<String>> | null, progress: Progress, file: File | null, b64: string }> {

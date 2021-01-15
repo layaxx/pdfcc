@@ -2,12 +2,12 @@
     display: flex;
     flex-wrap: wrap;
     margin: auto;
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 
 .analysis_result>div {
-    margin: 1em;
-    width: 180px;
+    margin-bottom: 1em;
+    width: 150px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -15,6 +15,13 @@
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .03);
     padding-bottom: 20px;
+}
+
+@media only screen and (min-width: 768px) {
+    .analysis_result>div {
+        margin: 1em;
+        width: 180px;
+    }
 }
 
 .btn {

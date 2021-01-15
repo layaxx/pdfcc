@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 
 
-const paginationTexts = ["Choose PDF", "Choose Colors", "Download your new PDF!"];
+const paginationTexts = ["Choose PDF", "Choose Colors", "Download PDF!"];
 
 function ProgressMeter(props: { progress: any, progress_enum: any }) {
     const items: JSX.Element[] = [];
