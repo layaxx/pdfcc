@@ -36,6 +36,7 @@ def process_request(post_data, old_pdf):
         if is_valid_color(key) and is_valid_color(post_data[key]):
             dict_of_valid_colors[key.replace(
                 '#', '')] = color(post_data[key])
+
     if len(dict_of_valid_colors) == 0:
         # raise Exception if no valid entries are found
         raise ValueError("No valid colors were provided")
@@ -57,6 +58,8 @@ def replace_colors(dict_of_colors, old_pdf):
     list_of_operators = [pikepdf.Operator('sc'), pikepdf.Operator(
         'SC'), pikepdf.Operator('rg'), pikepdf.Operator('RG')]
 
+    print("before")
+
     with pikepdf.Pdf.open(old_pdf) as pdf:
         # iterate over every page in the PDF
         for pageindex in range(len(pdf.pages)):
@@ -64,16 +67,22 @@ def replace_colors(dict_of_colors, old_pdf):
             content_stream = pikepdf.parse_content_stream(page)
             for entry in content_stream:
                 if entry[1] in list_of_operators:
+                    print(entry[1])
                     color_old_hexcode = color(entry[0]).get_hex()
                     color_new = dict_of_colors.get(
                         color_old_hexcode, color(color_old_hexcode))
                     if not color_new.get_hex() == color_old_hexcode:
                         color_new_rgb_list = color_new.get_rgb_1()
+                        print(entry[0][0], color_new_rgb_list[0])
                         entry[0][0] = color_new_rgb_list[0]
+                        """  print("after replace 1")
                         entry[0][1] = color_new_rgb_list[1]
-                        entry[0][2] = color_new_rgb_list[2]
+                        print("after replace 2")
+                        entry[0][2] = color_new_rgb_list[2] """
+
             content_stream_new = pikepdf.unparse_content_stream(content_stream)
             page.Contents = pdf.make_stream(content_stream_new)
         stream_output = io.BytesIO()
         pdf.save(stream_output)
+    print("after")
     return bytes(stream_output.getvalue())
