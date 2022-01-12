@@ -19,10 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'randomDevKey')
 
+SECURE_SSL_REDIRECT = os.environ.get('ISPRODUCTION', False)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', 'pdfcc.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
