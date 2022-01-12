@@ -31,7 +31,7 @@ In some cases, substitution causes elements to become invisible. In that case yo
 
 ## How PDFCC works
 ### General Mode of Operation
-This App makes use of the way a the PDF format works. If you got time on your hands and are interested in learning more about PDF, you should take a look at this document: [Adobe´s PDF (1.7) Specification](https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf), especially section A2. Please note that this is not the latest PDF Specification, there is a Version 2.0, but in contrast to the Specification linked above the new one is not freely accessible. I plan on writing a Blog post going more into detail about this project.
+This App makes use of the way the PDF format works. If you got time on your hands and are interested in learning more about PDF, you should take a look at this document: [Adobe´s PDF (1.7) Specification](https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf), especially section A2. Please note that this is not the latest PDF Specification, there is a Version 2.0, but in contrast to the Specification linked above the new one is not freely accessible. I plan on writing a Blog post going more into detail about this project.
 ### Frontend
 The Frontend is written in React (Typescript).
 ### Backend
@@ -42,8 +42,7 @@ Due to the limitations of the free tier, loading the app may take a few seconds.
 
 ## Privacy
 This app does not collect any personal information. It does not use cookies, neither for tracking or advertising, nor for other purposes.
-For technical reasons, and because this is merely a proof-of-concept, the traffic to the server is not encrypted. If you choose to upload files, you should be aware
-that your traffic is visible to anyone on the network. Submitted files are only stored in-memory and only for the duration of the substitution process.
+Submitted files are only stored in-memory and only for the duration of the substitution process.
 
 ## Plans for the future
-As stated previously, there will probably not be any major updates. However I do plan to add unittests to the backend and possibly the frontend as well.
+As stated previously, there will probably not be any major updates. However I do plan to add unit tests to the backend and possibly the frontend as well.
