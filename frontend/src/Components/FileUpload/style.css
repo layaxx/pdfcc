@@ -1,19 +1,20 @@
-#submit-status, #server-status {
-    margin: auto;
-    /* display: None; */
-    width: 70%;
-    text-align: center;
-    height: 3em;
+#submit-status,
+#server-status {
+  margin: auto;
+  /* display: None; */
+  width: 70%;
+  text-align: center;
+  height: 3em;
 }
 
 .status-wrapper {
-    margin-top: 4em;
-    margin-bottom: -3em;
-    height: 3em;
+  margin-top: 4em;
+  margin-bottom: -3em;
+  height: 3em;
 }
 
 .spinner-border {
-    width: 1rem;
-    height: 1rem;
-    margin-right: 1em;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 1em;
 }

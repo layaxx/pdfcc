@@ -1,89 +1,90 @@
 .colorcode {
-    padding: 20px;
-    height: 100px;
-    position: relative;
-    border-radius: 4px 4px 0px 0px;
-    border-bottom: solid gray 1px;
+  padding: 20px;
+  height: 100px;
+  position: relative;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: solid gray 1px;
 }
 
 .colorcode p {
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    position: inherit;
-    width: 4.5em;
-    margin: auto;
-    margin-top: 1em;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  position: inherit;
+  width: 4.5em;
+  margin: auto;
+  margin-top: 1em;
 }
 
-.left-side, .right-side {
-    position: absolute;
-    height: 100%;
-    width: 100%;
+.left-side,
+.right-side {
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 
 .left-side {
-    left: 0;
-    top: 0;
-    background-color: black;
-    -webkit-clip-path: polygon(0 0, 100% 0%, 0% 100%, 0% 100%);
-    clip-path: polygon(0 0, 100% 0%, 0% 100%, 0% 100%);
+  left: 0;
+  top: 0;
+  background-color: black;
+  -webkit-clip-path: polygon(0 0, 100% 0%, 0% 100%, 0% 100%);
+  clip-path: polygon(0 0, 100% 0%, 0% 100%, 0% 100%);
 }
 
 .right-side {
-    right: 0;
-    top: 0;
-    background-color: green;
-    -webkit-clip-path: polygon(100% 0, 100% 0%, 100% 100%, 0% 100%);
-    clip-path: polygon(100% 0, 100% 0%, 100% 100%, 0% 100%);
+  right: 0;
+  top: 0;
+  background-color: green;
+  -webkit-clip-path: polygon(100% 0, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(100% 0, 100% 0%, 100% 100%, 0% 100%);
 }
 
 .input-group {
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: -0.5em;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: -0.5em;
 }
 
 .pages {
-    width: 85%;
-    margin-left: auto;
-    margin-right: auto;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .analysis_result hr {
-    border: 0;
-    clear: both;
-    display: block;
-    width: 100%;
-    background-color: gray;
-    height: 1px;
-    padding: 0px;
-    margin: 0px;
+  border: 0;
+  clear: both;
+  display: block;
+  width: 100%;
+  background-color: gray;
+  height: 1px;
+  padding: 0px;
+  margin: 0px;
 }
 
 .invalid {
-    background-color: #dc3545;
-    color: white;
+  background-color: #dc3545;
+  color: white;
 }
 
 .valid {
-    background-color: #28a745;
-    color: white;
+  background-color: #28a745;
+  color: white;
 }
 
 .empty {
-    background-color: #e9ecef;
-    color: black;
+  background-color: #e9ecef;
+  color: black;
 }
 
 .same {
-    background-color: #ffc107;
-    color: black;
+  background-color: #ffc107;
+  color: black;
 }
 
 .incomplete {
-    background-color: aquamarine;
-    color: black;
+  background-color: aquamarine;
+  color: black;
 }
