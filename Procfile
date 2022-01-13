@@ -1,1 +1,1 @@
-web: gunicorn --chdir backend playground.wsgi
+web: bash scripts/deploy.sh && gunicorn --chdir backend playground.wsgi
