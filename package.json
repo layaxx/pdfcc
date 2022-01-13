@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "cd frontend && npm install",
-    "build": "cd frontend && npm build",
+    "build": "cd frontend && npm build && cd .. && bash scripts/deploy.sh",
     "start": "npm run build"
   },
   "repository": {
