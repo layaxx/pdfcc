@@ -4,7 +4,9 @@
   "description": "This is a proof-of-concept.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preinstall": "cd frontend && npm install",
+    "build": "cd frontend && npm build",
+    "start": "npm run build"
   },
   "repository": {
     "type": "git",
