@@ -1,4 +1,9 @@
 # PDF Color Changer
+
+# Web app Currently unavailable: 
+Due to changes to Herokus pricing model, this is no longer available as a web app.
+This may or may not change in the future.
+
 ## Python and React-based webapp allowing substitution of colors in a PDF.
 This is a proof-of-concept. 
 
